@@ -3,5 +3,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="ArLogger.vcxproj" />
+  <Project Path="../ArLoggerTest/ArLoggerTest.vcxproj" Id="99f46d87-9d4c-49a2-a8ec-897147af3996" />
+  <Project Path="ArLogger.vcxproj" Id="8fc1c0ba-b49e-4102-8225-bb2397bed5f8" />
 </Solution>
