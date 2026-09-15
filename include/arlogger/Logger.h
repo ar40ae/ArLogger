@@ -8,6 +8,7 @@
 #include <source_location>
 #include "LogLevel.h"
 #include "Sink.h"
+#include <mutex>
 
 namespace arlogger
 {
@@ -34,5 +35,7 @@ namespace arlogger
         std::string m_name;
         std::vector<std::shared_ptr<Sink>> m_sinks;
         LogLevel m_level;
+
+        std::mutex m_mutex;
     };
 }

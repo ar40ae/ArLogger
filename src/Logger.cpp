@@ -54,6 +54,8 @@ namespace arlogger {
 
     void Logger::log(LogLevel level, const std::string& message, const std::source_location& location)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         if (toValue(level) < toValue(m_level))
             return;
 
