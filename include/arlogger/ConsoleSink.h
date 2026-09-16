@@ -8,5 +8,6 @@ namespace arlogger {
 		explicit ConsoleSink(std::shared_ptr<Formatter> formatter);
 
 		void write(const LogRecord& record) override;
+		void flush() override;
 	};
 }

@@ -10,6 +10,7 @@ namespace arlogger{
 	struct LogRecord {
 		LogLevel level;
 		std::string loggerName;
+		std::string originLogger;
 		std::string message;
 		std::chrono::system_clock::time_point timestamp;
 		std::source_location location;

@@ -15,4 +15,9 @@ namespace arlogger {
 
 		std::cout << m_formatter->format(record) << "\n";
 	}
+
+	void ConsoleSink::flush()
+	{
+		std::cout.flush();
+	}
 }

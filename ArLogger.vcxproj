@@ -24,6 +24,7 @@
     <ClInclude Include="include\arlogger\FileSink.h" />
     <ClInclude Include="include\arlogger\Formatter.h" />
     <ClInclude Include="include\arlogger\Logger.h" />
+    <ClInclude Include="include\arlogger\LoggerBuilder.h" />
     <ClInclude Include="include\arlogger\LogLevel.h" />
     <ClInclude Include="include\arlogger\LogRecord.h" />
     <ClInclude Include="include\arlogger\Sink.h" />
@@ -33,6 +34,7 @@
     <ClCompile Include="src\DefaultFormatter.cpp" />
     <ClCompile Include="src\FileSink.cpp" />
     <ClCompile Include="src\Logger.cpp" />
+    <ClCompile Include="src\LoggerBuilder.cpp" />
     <ClCompile Include="src\LogLevel.cpp" />
     <ClCompile Include="src\Sink.cpp" />
   </ItemGroup>
