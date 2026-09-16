@@ -1,31 +1,84 @@
+
 # ArLogger
 
 A lightweight and extensible C++ logging library for Windows.
 
-ArLogger provides hierarchical loggers, customizable formatting, console and file sinks, log levels, source location tracking, thread safety, and automatic log file rotation.
+ArLogger provides hierarchical loggers, customizable formatting, console and file sinks, multiple log levels, source location tracking, thread safety, and automatic log file rotation.
 
 ## Features
 
-* Windows support
-* C++20
-* Trace, Debug, Info, Warning, Error, and Critical log levels
-* Hierarchical parent-child loggers
-* Console sink
-* File sink
-* Customizable log formatting
-* Source location tracking with `std::source_location`
-* Thread-safe logging
-* Log level filtering
-* Configurable automatic flushing
-* Log file size limits
-* Non-destructive log rotation
-* `LoggerBuilder` for convenient logger configuration
+- Windows support
+- C++20
+- Six log levels: Trace, Debug, Info, Warning, Error, and Critical
+- Hierarchical parent-child loggers
+- Console and file sinks
+- Customizable log formatting
+- Source location tracking with `std::source_location`
+- Thread-safe logging
+- Log level filtering
+- Configurable automatic flushing
+- Log file size limits
+- Non-destructive log rotation
+- Fluent `LoggerBuilder` API
+- CMake package support
 
 ## Requirements
 
-* Windows
-* Visual Studio 2022
-* C++20 or newer
+- Windows
+- Visual Studio 2022
+- C++20 or newer
+- CMake 3.20 or newer
+
+## Installation
+
+### Using CMake FetchContent
+
+Add ArLogger directly from GitHub using CMake.
+
+```cmake
+include(FetchContent)
+
+FetchContent_Declare(
+    ArLogger
+    GIT_REPOSITORY https://github.com/ar40ae/ArLogger.git
+    GIT_TAG v1.0.0
+)
+
+FetchContent_MakeAvailable(ArLogger)
+
+add_executable(MyApplication
+    main.cpp
+)
+
+target_link_libraries(MyApplication
+    PRIVATE
+        ArLogger
+)
+```
+
+### Using an Installed CMake Package
+
+ArLogger can also be installed and used as a CMake package.
+
+```cmake
+find_package(ArLogger CONFIG REQUIRED)
+
+add_executable(MyApplication
+    main.cpp
+)
+
+target_link_libraries(MyApplication
+    PRIVATE
+        ArLogger::ArLogger
+)
+```
+
+Specify the installation directory when configuring your project:
+
+```powershell
+cmake -S . -B build `
+    -DCMAKE_PREFIX_PATH="D:/C++/ArLogger/install"
+```
 
 ## Basic Usage
 
@@ -51,12 +104,14 @@ int main()
     logger.info("Engine started");
     logger.warning("Low texture memory");
     logger.error("Failed to load texture");
+
+    return 0;
 }
 ```
 
 ## LoggerBuilder
 
-`LoggerBuilder` can be used to configure and create a logger using a fluent API.
+`LoggerBuilder` provides a fluent API for configuring and creating loggers.
 
 ```cpp
 #include "arlogger/LoggerBuilder.h"
@@ -78,14 +133,14 @@ logger->error("Something failed");
 
 ArLogger provides six log levels:
 
-```text
-Trace
-Debug
-Info
-Warning
-Error
-Critical
-```
+| Level | Description |
+|-------|-------------|
+| Trace | Detailed diagnostic information |
+| Debug | Development and debugging information |
+| Info | General application information |
+| Warning | Potential problems |
+| Error | Errors that require attention |
+| Critical | Serious application failures |
 
 The logger only processes messages at or above its configured level.
 
@@ -117,16 +172,16 @@ auto formatter =
 
 ### Available Patterns
 
-| Pattern     | Description        |
-| ----------- | ------------------ |
-| `%date`     | Current local date |
-| `%time`     | Current local time |
-| `%level`    | Log level          |
-| `%logger`   | Logger name        |
-| `%message`  | Log message        |
-| `%file`     | Source file        |
-| `%line`     | Source line        |
-| `%function` | Function name      |
+| Pattern | Description |
+|---------|-------------|
+| `%date` | Current local date |
+| `%time` | Current local time |
+| `%level` | Log level |
+| `%logger` | Logger name |
+| `%message` | Log message |
+| `%file` | Source file |
+| `%line` | Source line |
+| `%function` | Function name |
 
 Example output:
 
@@ -151,18 +206,13 @@ auto rendererLogger =
 rendererLogger->info("Renderer initialized");
 ```
 
-A message logged by the child can propagate to its parent:
+Child loggers can propagate messages to their parent logger.
 
-```text
-[INFO] [Engine.Renderer] [Renderer initialized]
-[INFO] [Engine] [Renderer initialized]
-```
-
-Each logger can have its own log level.
+Each logger can have its own log level and configuration.
 
 ## File Logging
 
-ArLogger provides a `FileSink` for writing logs to a file.
+ArLogger provides a `FileSink` for writing logs to files.
 
 ```cpp
 auto fileSink =
@@ -175,7 +225,7 @@ auto fileSink =
 
 The third parameter specifies the maximum file size in bytes.
 
-When the file reaches the configured limit, it is rotated without deleting existing log files:
+When the file reaches the configured limit, it is rotated without deleting existing log files.
 
 ```text
 engine.log
@@ -188,7 +238,7 @@ Existing rotated files are preserved.
 
 ## Source Location
 
-Logging functions automatically capture the source location using `std::source_location`.
+Logging functions automatically capture source location information using `std::source_location`.
 
 ```cpp
 logger.info("Renderer initialized");
@@ -196,11 +246,11 @@ logger.info("Renderer initialized");
 
 A formatter can access:
 
-* Source file
-* Line number
-* Function name
+- Source file
+- Line number
+- Function name
 
-For example:
+Example:
 
 ```text
 (Renderer.cpp:42)
@@ -208,7 +258,29 @@ For example:
 
 ## Thread Safety
 
-ArLogger uses C++ synchronization primitives to protect logger state and sink operations, allowing the logger to be used from multiple threads.
+ArLogger uses C++ synchronization primitives to protect logger state and sink operations, allowing loggers to be used from multiple threads.
+
+## Building from Source
+
+Clone the repository:
+
+```powershell
+git clone https://github.com/ar40ae/ArLogger.git
+cd ArLogger
+```
+
+Configure and build the project:
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+```
+
+To build the Debug configuration:
+
+```powershell
+cmake --build build --config Debug
+```
 
 ## Project Structure
 
@@ -235,10 +307,17 @@ ArLogger/
 │   ├── FileSink.cpp
 │   └── DefaultFormatter.cpp
 │
-├── ArLogger.vcxproj
-├── ArLogger.slnx
-└── LICENSE.txt
+├── cmake/
+│   └── ArLoggerConfig.cmake.in
+│
+├── CMakeLists.txt
+├── LICENSE.txt
+└── README.md
 ```
+
+## Repository
+
+[GitHub Repository](https://github.com/ar40ae/ArLogger)
 
 ## License
 
